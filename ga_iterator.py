@@ -1,6 +1,7 @@
 from copy import deepcopy
 from random import random, randint, randrange
 
+from input.utils import get_input, print_schedule
 from population_generator import generate_population
 
 
@@ -27,12 +28,12 @@ def crossover_population(population, crossover_percentage):
 def swap_days(candidate):
     class_index = randrange(len(candidate))
     first_index = randrange(len(candidate[class_index]))
-    second_index = first_index
+    second_index = randrange(len(candidate[class_index]))
     while candidate[class_index][first_index] == candidate[class_index][second_index]:
         second_index = randrange(len(candidate[class_index]))
     candidate[class_index][first_index], candidate[class_index][second_index] = \
         candidate[class_index][second_index], candidate[class_index][first_index]
-    print(f'Swapped days {first_index} and {second_index} for class {class_index}')
+    # print(f'Swapped days {first_index} and {second_index} for class {class_index}')
     return candidate
 
 
@@ -46,12 +47,16 @@ def swap_subjects(candidate):
     first_index = randrange(len(first_day))
     second_day = candidate[class_index][second_day_index]
     second_index = randrange(len(second_day))
+    it_number = 0
     while candidate[class_index][first_day_index][first_index] == candidate[class_index][second_day_index][second_index]:
         second_index = randrange(len(second_day))
+        it_number += 1
+        if it_number > 20:
+            return swap_subjects(candidate)
     candidate[class_index][first_day_index][first_index], candidate[class_index][second_day_index][second_index] = \
         candidate[class_index][second_day_index][second_index], candidate[class_index][first_day_index][first_index]
-    print(f'Swapped subjects day {first_day_index} subject {first_index} '
-          f'with day {second_day_index} subject {second_index} for class {class_index}')
+    # print(f'Swapped subjects day {first_day_index} subject {first_index} '
+    #       f'with day {second_day_index} subject {second_index} for class {class_index}')
     return candidate
 
 
@@ -87,10 +92,10 @@ def fitness(candidate):
 def selector(population):
     new_population = []
     fitness_scores = [fitness(candidate) for candidate in population]
+    print(f'Best fitness score is {max(fitness_scores)}')
     fitness_scores = [fitness_score / sum(fitness_scores) for fitness_score in fitness_scores]
     fitness_scores = [fitness_score + sum(fitness_scores[0:current_index])
                       for current_index, fitness_score in enumerate(fitness_scores)]
-    print(f'Best fitness score is {max(fitness_scores)}')
     for pop_index in range(len(population)):
         chosen_value = random()
         for fitness_index in range(len(fitness_scores)):
@@ -101,11 +106,11 @@ def selector(population):
 
 
 def genetic_algorithm(classes,
-                      population_size=10,
-                      iterations=150,
-                      mutation_percentage=0.05,
+                      population_size=100,
+                      iterations=1000,
+                      mutation_percentage=0.15,
                       mutation_flavor_percentage=0.3,
-                      crossover_percentage=0.1):
+                      crossover_percentage=0.15):
     population = generate_population(classes, population_size)
     for iteration in range(iterations):
         print(f'Iteration {iteration}')
@@ -114,23 +119,33 @@ def genetic_algorithm(classes,
         crossover_population(population, crossover_percentage)
     print(f'Best individual: {max(population, key=lambda candidate: fitness(candidate))} '
           f'(score: {max([fitness(candidate) for candidate in population])})')
+    return max(population, key=lambda candidate: fitness(candidate))
 
 
 if __name__ == '__main__':
-    candidate = \
-        [                     # List of classes
-            [                 # List of days
-                [1, 8, 2],    # List of subjects
-                [5, 1, 7],
-                [1, 4]],
-            [
-                [5, 1, 7],
-                [1, 8, 2],
-                [7, 2]
-            ]
-        ]
-    mutate_individual(candidate, 1)
-    mutate_individual(candidate, 0)
-    print(candidate)
-    selector(list(range(10)))
-    exit(0)
+    # candidate = \
+    #     [                     # List of classes
+    #         [                 # List of days
+    #             [1, 8, 2],    # List of subjects
+    #             [5, 1, 7],
+    #             [1, 4]],
+    #         [
+    #             [5, 1, 7],
+    #             [1, 8, 2],
+    #             [7, 2]
+    #         ]
+    #     ]
+    # mutate_individual(candidate, 1)
+    # mutate_individual(candidate, 0)
+    # print(candidate)
+    # selector(list(range(10)))
+    # exit(0)
+    input_data = get_input()
+    all_classes = input_data["assignments"]
+    selected_individual = genetic_algorithm(all_classes)
+    for class_index in range(len(selected_individual)):
+        print_schedule(
+            title=input_data["classes"][class_index],
+            teachers=input_data["teachers"],
+            schedule=selected_individual[class_index]
+        )

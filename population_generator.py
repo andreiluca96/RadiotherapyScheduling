@@ -1,5 +1,4 @@
 from itertools import islice
-from itertools import islice
 from random import shuffle
 
 from input.utils import get_input, print_schedule
