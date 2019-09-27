@@ -65,6 +65,7 @@ def selector(population):
     fitnesses = [fitness_score + sum(fitnesses[0:current_index]) for current_index, fitness_score in enumerate(fitnesses)]
     for pop_index in range(len(population)):
         chosen_value = random()
+        # TODO: Binary search in this bitch
         for fitness_index in range(len(fitnesses)):
             if fitnesses[fitness_index] > chosen_value:
                 new_population.append(deepcopy(population[fitness_index]))
