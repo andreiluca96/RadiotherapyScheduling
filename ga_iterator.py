@@ -105,6 +105,13 @@ def selector(population):
     return new_population
 
 
+def elitist_selector(population):
+    population.sort(key=lambda individual: fitness(individual), reverse=True)
+    kept_indices = int(len(population) * 0.2)
+    new_population = [deepcopy(population[index % kept_indices]) for index in range(len(population))]
+    return new_population
+
+
 def genetic_algorithm(classes,
                       population_size=100,
                       iterations=1000,
@@ -114,7 +121,10 @@ def genetic_algorithm(classes,
     population = generate_population(classes, population_size)
     for iteration in range(iterations):
         print(f'Iteration {iteration}')
-        population = selector(population)
+        # population = selector(population)
+        fitness_scores = [fitness(candidate) for candidate in population]
+        print(f'Best fitness score is {max(fitness_scores)}')
+        population = elitist_selector(population)
         mutate_population(population, mutation_percentage, mutation_flavor_percentage)
         crossover_population(population, crossover_percentage)
     print(f'Best individual: {max(population, key=lambda candidate: fitness(candidate))} '
