@@ -40,14 +40,20 @@ def random_chunks(li, size_list):
             break
 
 
-def generate_population(subjects: list, pop_size=100, days_count=5):
-    result = []
-    week_size = randomize_days_length(len(subjects), days_count)
+def generate_population(classes: list, pop_size=100, days_count=5):
+    all_class_variants = []
+    for class_group in classes:
+        week_size = randomize_days_length(len(class_group), days_count)
+        class_variants = []
 
-    for individual in range(pop_size):
-        result.append(generate_class_schedule(subjects, week_size))
+        for individual in range(pop_size):
+            class_variants.append(generate_class_schedule(class_group, week_size))
+        all_class_variants.append(class_variants)
 
-    return result
+    population = []
+    for option_index in range(pop_size):
+        population.append([all_class_variants[class_index][option_index] for class_index in range(len(classes))])
+    return population
 
 
 def generate_class_schedule(subjects, subjects_per_day):
@@ -67,14 +73,22 @@ def generate_class_schedule(subjects, subjects_per_day):
 
 
 if __name__ == '__main__':
-    all_subjects = [
+    class_1 = [
         0, 0, 0, 0, 0,
         1, 1, 1, 1, 1,
         2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7
     ]
 
+    class_2 = [
+        9, 9, 9, 9, 9,
+        10, 10, 10, 10, 10,
+        2, 2, 3, 3, 4, 4, 5, 5, 8, 8, 7
+    ]
+
+    all_classes = [class_1, class_2]
+
     population = generate_population(
-        subjects=all_subjects,
+        classes=all_classes,
         pop_size=10
     )
     print('done')
