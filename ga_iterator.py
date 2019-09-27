@@ -1,5 +1,8 @@
 from copy import deepcopy
 from random import random, randint, randrange
+import numpy as np
+
+from population_generator import generate_population
 
 
 def mutate_population(population, mutation_percentage, mutation_flavor_percentage):
@@ -7,6 +10,19 @@ def mutate_population(population, mutation_percentage, mutation_flavor_percentag
         mutation_factor = random()
         if mutation_factor < mutation_percentage:
             population[index] = mutate_individual(individual, mutation_flavor_percentage)
+
+
+# This implementation allows for an individual to be crossed over multiple times
+def crossover_population(population, crossover_percentage):
+    for index, individual in enumerate(population):
+        crossover_factor = random()
+        if crossover_factor < crossover_percentage:
+            first_index = randrange(len(population))
+            second_index = randrange(len(population))
+            while first_index == second_index:
+                second_index = randrange(len(population))
+            population[first_index], population[second_index] = \
+                crossover(population[first_index], population[second_index])
 
 
 def swap_days(candidate):
@@ -55,21 +71,39 @@ def crossover(candidate1, candidate2):
 
 
 def fitness(candidate):
-    return randint()
+    return randint(0, 100)
 
 
 def selector(population):
     new_population = []
-    fitnesses = [fitness(candidate) for candidate in population]
-    fitnesses = [fitness_score / sum(fitnesses) for fitness_score in fitnesses]
-    fitnesses = [fitness_score + sum(fitnesses[0:current_index]) for current_index, fitness_score in enumerate(fitnesses)]
+    fitness_scores = [fitness(candidate) for candidate in population]
+    fitness_scores = [fitness_score / sum(fitness_scores) for fitness_score in fitness_scores]
+    fitness_scores = [fitness_score + sum(fitness_scores[0:current_index])
+                      for current_index, fitness_score in enumerate(fitness_scores)]
+    print(f'Best fitness score is {max(fitness_scores)}')
     for pop_index in range(len(population)):
         chosen_value = random()
-        # TODO: Binary search in this bitch
-        for fitness_index in range(len(fitnesses)):
-            if fitnesses[fitness_index] > chosen_value:
+        for fitness_index in range(len(fitness_scores)):
+            if fitness_scores[fitness_index] > chosen_value:
                 new_population.append(deepcopy(population[fitness_index]))
+                break
     return new_population
+
+
+def genetic_algorithm(classes,
+                      population_size=10,
+                      iterations=150,
+                      mutation_percentage=0.05,
+                      mutation_flavor_percentage=0.3,
+                      crossover_percentage=0.1):
+    population = generate_population(classes, population_size)
+    for iteration in range(iterations):
+        print(f'Iteration {iteration}')
+        population = selector(population)
+        mutate_population(population, mutation_percentage, mutation_flavor_percentage)
+        crossover_population(population, crossover_percentage)
+    print(f'Best individual: {population[max(population, key=lambda candidate: fitness(candidate))]} '
+          f'(score: {max([fitness(candidate) for candidate in population])})')
 
 
 if __name__ == '__main__':
@@ -88,4 +122,5 @@ if __name__ == '__main__':
     mutate_individual(candidate, 1)
     mutate_individual(candidate, 0)
     print(candidate)
+    selector(list(range(10)))
     exit(0)
