@@ -1,5 +1,8 @@
 from itertools import islice
-from random import randint, shuffle
+from itertools import islice
+from random import shuffle
+
+from input.utils import get_input, print_schedule
 
 
 def randomize_days_length(total_number_of_days, chunks):
@@ -59,10 +62,6 @@ def generate_population(classes: list, pop_size=100, days_count=5):
 def generate_class_schedule(subjects, subjects_per_day):
     """
     Generate schedule for a single class
-    :param days_count:
-    :param subjects:
-    :param subjects_per_day:
-    :return:
     """
     shuff_subjects = subjects.copy()
     shuffle(shuff_subjects)
@@ -73,22 +72,20 @@ def generate_class_schedule(subjects, subjects_per_day):
 
 
 if __name__ == '__main__':
-    class_1 = [
-        0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1,
-        2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7
-    ]
-
-    class_2 = [
-        9, 9, 9, 9, 9,
-        10, 10, 10, 10, 10,
-        2, 2, 3, 3, 4, 4, 5, 5, 8, 8, 7
-    ]
-
-    all_classes = [class_1, class_2]
+    input_data = get_input()
+    all_classes = input_data["assignments"]
 
     population = generate_population(
         classes=all_classes,
         pop_size=10
     )
+
+    selected_individual = population[0]
+    for class_index in range(len(selected_individual)):
+        print_schedule(
+            title=input_data["classes"][class_index],
+            teachers=input_data["teachers"],
+            schedule=selected_individual[class_index]
+        )
+
     print('done')
