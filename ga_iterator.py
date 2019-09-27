@@ -1,3 +1,4 @@
+from copy import deepcopy
 from random import random, randint, randrange
 
 
@@ -51,6 +52,23 @@ def crossover(candidate1, candidate2):
     class_index = randrange(len(candidate1))
     candidate1[class_index], candidate2[class_index] = candidate2[class_index], candidate1[class_index]
     return candidate1, candidate2
+
+
+def fitness(candidate):
+    return randint()
+
+
+def selector(population):
+    new_population = []
+    fitnesses = [fitness(candidate) for candidate in population]
+    fitnesses = [fitness_score / sum(fitnesses) for fitness_score in fitnesses]
+    fitnesses = [fitness_score + sum(fitnesses[0:current_index]) for current_index, fitness_score in enumerate(fitnesses)]
+    for pop_index in range(len(population)):
+        chosen_value = random()
+        for fitness_index in range(len(fitnesses)):
+            if fitnesses[fitness_index] > chosen_value:
+                new_population.append(deepcopy(population[fitness_index]))
+    return new_population
 
 
 if __name__ == '__main__':
