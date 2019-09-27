@@ -47,6 +47,12 @@ def mutate_individual(candidate, mutation_flavor_percentage):
     return candidate
 
 
+def crossover(candidate1, candidate2):
+    class_index = randrange(len(candidate1))
+    candidate1[class_index], candidate2[class_index] = candidate2[class_index], candidate1[class_index]
+    return candidate1, candidate2
+
+
 if __name__ == '__main__':
     candidate = \
         [                     # List of classes
