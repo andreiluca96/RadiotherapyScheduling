@@ -140,8 +140,8 @@ def genetic_algorithm(classes,
             best_fitness = new_maximum
     # print(f'Best individual: {max(population, key=lambda candidate: fitness(candidate))} '
     #       f'(score: {max([fitness(candidate) for candidate in population])})')
-    # with open('results.txt', 'a') as f:
-    #     f.write(f'{max([fitness(candidate) for candidate in population])} {max(population, key=lambda candidate: fitness(candidate))}\n')
+    with open('best_result.txt', 'a') as f:
+        f.write(f'{max([fitness(candidate) for candidate in population])} {max(population, key=lambda candidate: fitness(candidate))}\n')
     return max(population, key=lambda candidate: fitness(candidate))
 
 

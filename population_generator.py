@@ -1,7 +1,7 @@
 from itertools import islice
 from random import shuffle
 
-from input.utils import get_input, print_schedule
+from input.utils import get_input, print_schedule, print_schedule_teacher
 
 
 def randomize_days_length(total_number_of_days, chunks):
@@ -85,6 +85,14 @@ if __name__ == '__main__':
             title=input_data["classes"][class_index],
             teachers=input_data["teachers"],
             schedule=selected_individual[class_index]
+        )
+
+    for teacher in range(len(input_data['teachers'])):
+        print_schedule_teacher(
+            schedule=selected_individual,
+            teacher=teacher,
+            teachers=input_data['teachers'],
+            classes=all_classes
         )
 
     print('done')
