@@ -120,7 +120,13 @@ def genetic_algorithm(classes,
                       mutation_flavor_percentage=0.3,
                       crossover_percentage=0.15):
     population = generate_population(classes, population_size)
-    for iteration in range(iterations):
+    best_fitness = 0
+    it = 0
+    # for iteration in range(iterations):
+    while best_fitness < 35:
+        it += 1
+        if it % 100 == 0:
+            print(f'Iteration {it}')
         # print(f'Iteration {iteration}')
         # population = selector(population)
         fitness_scores = [fitness(candidate) for candidate in population]
@@ -128,10 +134,14 @@ def genetic_algorithm(classes,
         population = elitist_selector(population)
         mutate_population(population, mutation_percentage, mutation_flavor_percentage)
         crossover_population(population, crossover_percentage)
-    print(f'Best individual: {max(population, key=lambda candidate: fitness(candidate))} '
-          f'(score: {max([fitness(candidate) for candidate in population])})')
-    with open('results.txt', 'a') as f:
-        f.write(f'{max([fitness(candidate) for candidate in population])} {max(population, key=lambda candidate: fitness(candidate))}\n')
+        new_maximum = max([fitness(candidate) for candidate in population])
+        if new_maximum > best_fitness:
+            print(f'New maximum obtained ({new_maximum})')
+            best_fitness = new_maximum
+    # print(f'Best individual: {max(population, key=lambda candidate: fitness(candidate))} '
+    #       f'(score: {max([fitness(candidate) for candidate in population])})')
+    # with open('results.txt', 'a') as f:
+    #     f.write(f'{max([fitness(candidate) for candidate in population])} {max(population, key=lambda candidate: fitness(candidate))}\n')
     return max(population, key=lambda candidate: fitness(candidate))
 
 
@@ -153,12 +163,9 @@ if __name__ == '__main__':
     # print(candidate)
     # selector(list(range(10)))
     # exit(0)
-    for it in range(96):
-        start_time = time.time()
-        input_data = get_input()
-        all_classes = input_data["assignments"]
-        selected_individual = genetic_algorithm(all_classes)
-        print(f'Time: {time.time() - start_time}')
+    input_data = get_input()
+    all_classes = input_data["assignments"]
+    selected_individual = genetic_algorithm(all_classes)
     # for class_index in range(len(selected_individual)):
     #     print_schedule(
     #         title=input_data["classes"][class_index],
