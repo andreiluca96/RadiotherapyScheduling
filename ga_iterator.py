@@ -1,6 +1,7 @@
 import time
 from copy import deepcopy
 from random import random, randint, randrange
+from typing import List
 
 from input.utils import get_input, print_schedule
 from population_generator import generate_population
@@ -113,6 +114,20 @@ def elitist_selector(population):
     return new_population
 
 
+def peek_population(population: List[object]):
+    population.sort(key=lambda individual: fitness(individual), reverse=True)
+    kept_indices = int(len(population) * 0.2)
+    best_individual = population[0]
+    best_fitness_list: list = []
+    for index in range(kept_indices):
+        individual = population[index]
+        best_fitness_list.append(fitness(individual))
+    # best_fitness_str = ', '.join(best_fitness_list)
+    print(f'Best individual: \t{best_individual}')
+    print(f'Best indices: \t\t{best_fitness_list}')
+    print('\n')
+
+
 def genetic_algorithm(classes,
                       population_size=100,
                       iterations=1000,
@@ -123,13 +138,16 @@ def genetic_algorithm(classes,
     for iteration in range(iterations):
         # print(f'Iteration {iteration}')
         # population = selector(population)
-        fitness_scores = [fitness(candidate) for candidate in population]
+        # fitness_scores = [fitness(candidate) for candidate in population]
         # print(f'Best fitness score is {max(fitness_scores)}')
         population = elitist_selector(population)
         mutate_population(population, mutation_percentage, mutation_flavor_percentage)
         crossover_population(population, crossover_percentage)
-    print(f'Best individual: {max(population, key=lambda candidate: fitness(candidate))} '
-          f'(score: {max([fitness(candidate) for candidate in population])})')
+        # best_individual = max(population, key=lambda candidate: fitness(candidate))
+        # print(f'Best individual: {best_individual} (score: {fitness(best_individual)})')
+        print(iteration)
+        peek_population(population)
+
     with open('results.txt', 'a') as f:
         f.write(f'{max([fitness(candidate) for candidate in population])} {max(population, key=lambda candidate: fitness(candidate))}\n')
     return max(population, key=lambda candidate: fitness(candidate))
