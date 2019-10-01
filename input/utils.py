@@ -60,12 +60,12 @@ def build_table_for_single_teacher(schedule, teacher, classes):
     for slot_index in range(max([len(day) for class_schedule in schedule for day in class_schedule])):
         row = [f'{slot_index + 8}:00']
         for day_index in range(5):
-            row_len = len(row)
+            added_character = ''
             for class_index in range(len(schedule)):
-                if len(schedule[class_index][day_index]) > slot_index and schedule[class_index][day_index][slot_index] == teacher:
-                    row += [classes[class_index]]
-            if row_len == len(row):
-                row += ['']
+                if len(schedule[class_index][day_index]) > slot_index \
+                and schedule[class_index][day_index][slot_index] == teacher:
+                    added_character = classes[class_index]
+            row += [added_character]
         table.add_row(row)
 
     return table
