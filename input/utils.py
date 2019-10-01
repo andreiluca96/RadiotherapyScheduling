@@ -1,6 +1,9 @@
+from functools import lru_cache
+
 import texttable
 
 
+@lru_cache(maxsize=1)
 def get_input():
     """Dummy method to be used just because it can do better formatting"""
     return {

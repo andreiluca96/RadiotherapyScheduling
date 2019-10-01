@@ -6,21 +6,22 @@ from fitness import fitness
 
 def peek_population(population: List[object]):
     population.sort(key=lambda individual_schedule: fitness(individual_schedule), reverse=True)
-    kept_indices = int(len(population) * 0.2)
     best_individual = population[0]
-    best_fitness_list: list = []
-    for index in range(kept_indices):
-        individual = population[index]
-        best_fitness_list.append(fitness(individual))
-    # best_fitness_str = ', '.join(best_fitness_list)
-    # unique_individuals = len(list(set(population)))
-    # distribution: list = Counter(population).values()
+    # best_fitness_list: list = get_top_best_fitness_list(population, kept_indices)
     population_dict = population_counter(population)
-    print(f'Best individual [{fitness(best_individual)}]: \t{best_individual}')
+    # print(f'Best individual [{fitness(best_individual)}]: \t{best_individual}')
     print(f'Unique: \t\t\t\t{len(population_dict)}')
-    print(f'Best indices: \t\t\t{best_fitness_list}')
+    # print(f'Best indices: \t\t\t{best_fitness_list}')
     print(f'Distribution: \t\t\t{sorted(population_dict.values(), reverse=True)}')
-    print('\n')
+    return best_individual, population_dict
+
+
+def get_top_best_fitness_list(population, top_percent = 0.2) -> list:
+    kept_indices = int(len(population) * top_percent)
+    best_fitness_list = []
+    for index in range(kept_indices):
+        best_fitness_list.append(fitness(population[index]))
+    return best_fitness_list
 
 
 def population_counter(population: List[object]):
