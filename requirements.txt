@@ -1,1 +1,3 @@
 texttable
+matplotlib
+numpy
