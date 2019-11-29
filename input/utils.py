@@ -1,50 +1,17 @@
+import random
 from functools import lru_cache
 
 import texttable
 
 
 @lru_cache(maxsize=1)
-def get_input():
+def get_input(patients):
     """Dummy method to be used just because it can do better formatting"""
-    return {
-        "classes": ["5A", "5B", "6A", "6B", "7A", "7B", "8A", "8B"],
-        "teachers": [
-            "Angel", "Alama", "Aragon", "Tifa", "Cloud",
-            "Smokie", "Lucky", "Puffy", "Fluffy", "Roar",
-            "Bonk", "Loki", "Titan", "Marcus", "Cazan"
-        ],
-        "assignments": [
-            [
-                0, 0, 0, 0, 0,
-                1, 1, 1, 1, 1,
-                2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7
-            ], [
-                9, 9, 9, 9, 9,
-                10, 10, 10, 10, 10,
-                2, 2, 3, 3, 4, 4, 5, 5, 8, 8, 7
-            ], [
-                0, 0, 0, 0, 0,
-                1, 1, 1, 1, 1,
-                2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7
-            ], [
-                9, 9, 9, 9, 9,
-                10, 10, 10, 10, 10,
-                2, 2, 3, 3, 4, 4, 5, 5, 8, 8, 7
-            ], [
-                0, 0, 0, 0, 0,
-                1, 1, 1, 1, 1,
-                2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7
-            ], [
-                9, 9, 9, 9, 9,
-                10, 10, 10, 10, 10,
-                2, 2, 3, 3, 4, 4, 5, 5, 8, 8, 7
-            ], [
-                0, 0, 0, 0, 0,
-                1, 1, 1, 1, 1,
-                2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7
-            ], [9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 2, 2, 3, 3, 4, 4, 5, 5, 8, 8, 7]
-        ]
-    }
+    return \
+        {
+            'treatment_days': [random.randint(2, 5) for _ in range(patients)],
+            'priority': [random.randint(1, 4) for _ in range(patients)]
+        }
 
 
 def build_table_for_single_schedule(schedule, teachers):

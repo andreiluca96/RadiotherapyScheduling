@@ -12,8 +12,9 @@ import numpy as np
 
 
 class GA(object):
-    def __init__(self, population_size=100,
-                 iterations=None,
+    def __init__(self,
+                 population_size=100,
+                 iterations=100,
                  mutation_percentage=0.5,
                  mutation_flavor_percentage=0.3,
                  crossover_percentage=0.5) -> None:
@@ -24,8 +25,8 @@ class GA(object):
         self.crossover_percentage = crossover_percentage
         self.max_fitness = 35
 
-    def genetic_algorithm(self, classes):
-        population = generate_population(classes, self.population_size)
+    def genetic_algorithm(self, patient_number):
+        population = generate_population(patient_number, self.population_size)
         data = {
             'max_fitness': [],
             'uniqueness': []
@@ -33,12 +34,10 @@ class GA(object):
         best_fitness = 0
         best_individual = ''
         it = 0
-        while best_fitness < self.max_fitness:
+        # while best_fitness < self.max_fitness:
+        while it < self.iterations:
             print('\n')
             it += 1
-            if self.iterations is not None and it >= self.iterations:
-                print(f'Maximum iterations reached. Best fitness {best_fitness}')
-                break
 
             if it % 100 == 0:
                 print(f'Iteration {it}')
@@ -65,6 +64,7 @@ class GA(object):
                 plt.plot(np.arange(0, it), data['max_fitness'], c='m')
                 plt.plot(np.arange(0, it), data['uniqueness'], c='r')
                 plt.show()
+        print(f'Maximum iterations reached. Best fitness {best_fitness}')
 
         with open('results.txt', 'a') as f:
             f.write(
