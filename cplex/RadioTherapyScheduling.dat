@@ -1,0 +1,11 @@
+/*********************************************
+ * OPL 12.9.0.0 Data
+ * Author: Luca Andrei
+ * Creation Date: Oct 17, 2019 at 9:30:26 PM
+ *********************************************/
+NbPatients = 1;
+NbDays = 3;
+NbSlots = 1;
+
+NbTreatmentDays = [2];
+PatientPriority = [1];
