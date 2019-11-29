@@ -1,7 +1,7 @@
 import json
 from typing import List, Dict
 
-from fitness import fitness
+from genetic_algorithm.fitness import fitness
 
 
 def peek_population(population: List[object]):
