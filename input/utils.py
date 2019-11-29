@@ -3,21 +3,18 @@ from functools import lru_cache
 
 
 @lru_cache(maxsize=1)
-def get_input():
+def get_input(patients=100, days=20, slots=10, max_treatment_days=10):
     """Dummy method to be used just because it can do better formatting"""
-
-    patients = 100
-    days = 20
-    slots = 10
     random.seed(7)
     return \
         {
             'patients': patients,
             'days': days,
             'slots': slots,
-            'treatment_days': [random.randint(2, 5) for _ in range(patients)],
+            'treatment_days': [random.randint(2, max_treatment_days) for _ in range(patients)],
             'priorities': [random.randint(1, 4) for _ in range(patients)]
         }
+
 
 #
 # def build_table_for_single_schedule(schedule, teachers):
@@ -60,4 +57,3 @@ def get_input():
 
 if __name__ == '__main__':
     input_data = get_input()
-

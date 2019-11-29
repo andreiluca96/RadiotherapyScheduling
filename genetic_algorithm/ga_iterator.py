@@ -1,6 +1,6 @@
 import time
 
-from genetic_algorithm.fitness import fitness
+from input.fitness import fitness
 from genetic_algorithm.ga_operators import crossover_population, mutate_population
 from input.utils import get_input
 from genetic_algorithm.population_generator import generate_population
@@ -20,8 +20,9 @@ class GA(object):
         self.mutation_percentage = mutation_percentage
         self.crossover_percentage = crossover_percentage
 
-    def genetic_algorithm(self):
-        problem_input = get_input()
+    def genetic_algorithm(self, problem_input=None):
+        if problem_input is None:
+            problem_input = get_input()
 
         population = generate_population(problem_input, self.population_size)
 
@@ -71,9 +72,26 @@ class GA(object):
 
 if __name__ == '__main__':
     start_time = time.time()
-    input_data = get_input()
-    selected_individual = GA().genetic_algorithm()
+    input_data = get_input(patients=25)
+    selected_individual = GA().genetic_algorithm(input_data)
     print(f'Time: {time.time() - start_time}')
+
+    start_time = time.time()
+    input_data = get_input(patients=50)
+    selected_individual = GA().genetic_algorithm(input_data)
+    print(f'Time: {time.time() - start_time}')
+
+    start_time = time.time()
+    input_data = get_input(patients=100)
+    selected_individual = GA().genetic_algorithm(input_data)
+    print(f'Time: {time.time() - start_time}')
+
+    start_time = time.time()
+    input_data = get_input(patients=150)
+    selected_individual = GA().genetic_algorithm(input_data)
+    print(f'Time: {time.time() - start_time}')
+
+
     plt.show()
 
     # for class_index in range(len(selected_individual)):

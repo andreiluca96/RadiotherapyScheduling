@@ -1,7 +1,7 @@
 from copy import deepcopy
 from random import random
 
-from genetic_algorithm.fitness import fitness
+from input.fitness import fitness
 
 
 def elitist_selector(population, input_data):
