@@ -20,6 +20,17 @@ class GA(object):
         self.mutation_percentage = mutation_percentage
         self.crossover_percentage = crossover_percentage
 
+    def __eq__(self, other):
+        """Overrides the default implementation"""
+        if isinstance(other, GA):
+            return self.iterations == other.iterations and self.mutation_percentage == other.mutation_percentage
+        return False
+
+    def __lt__(self, other):
+        if isinstance(other, GA):
+            return self.iterations < other.iterations
+        return False
+
     def genetic_algorithm(self, problem_input=None):
         if problem_input is None:
             problem_input = get_input()
@@ -40,12 +51,12 @@ class GA(object):
             if it % 100 == 0:
                 print(f'Iteration {it}')
             # population = selector(population, input_data)
-            population = elitist_selector(population, input_data=input_data)
+            population = elitist_selector(population, input_data=problem_input)
             mutate_population(population, self.mutation_percentage)
             crossover_population(population, self.crossover_percentage)
             # best_individual = max(population, key=lambda candidate: fitness(candidate))
 
-            new_maximum = max([fitness(candidate, input_data) for candidate in population])
+            new_maximum = max([fitness(candidate, problem_input) for candidate in population])
             data['max_fitness'].append(new_maximum)
             if new_maximum > best_fitness:
                 print(f'New maximum obtained ({new_maximum}) in iteration {it}')
@@ -63,11 +74,11 @@ class GA(object):
                 # plt.plot(np.arange(0, it), data['uniqueness'], c='r')
         print(f'Maximum iterations reached. Best fitness {best_fitness}')
 
-        with open('results.txt', 'a') as f:
-            f.write(
-                f'{max([fitness(candidate, input_data) for candidate in population])} {max(population, key=lambda candidate: fitness(candidate, input_data))}\n')
+        # with open('results.txt', 'a') as f:
+        #     f.write(
+        #         f'{max([fitness(candidate, problem_input) for candidate in population])} {max(population, key=lambda candidate: fitness(candidate, problem_input))}\n')
 
-        return max(population, key=lambda candidate: fitness(candidate, input_data))
+        return max(population, key=lambda candidate: fitness(candidate, problem_input)), best_fitness
 
 
 if __name__ == '__main__':
@@ -76,20 +87,20 @@ if __name__ == '__main__':
     selected_individual = GA().genetic_algorithm(input_data)
     print(f'Time: {time.time() - start_time}')
 
-    start_time = time.time()
-    input_data = get_input(patients=50)
-    selected_individual = GA().genetic_algorithm(input_data)
-    print(f'Time: {time.time() - start_time}')
-
-    start_time = time.time()
-    input_data = get_input(patients=100)
-    selected_individual = GA().genetic_algorithm(input_data)
-    print(f'Time: {time.time() - start_time}')
-
-    start_time = time.time()
-    input_data = get_input(patients=150)
-    selected_individual = GA().genetic_algorithm(input_data)
-    print(f'Time: {time.time() - start_time}')
+    # start_time = time.time()
+    # input_data = get_input(patients=50)
+    # selected_individual = GA().genetic_algorithm(input_data)
+    # print(f'Time: {time.time() - start_time}')
+    #
+    # start_time = time.time()
+    # input_data = get_input(patients=100)
+    # selected_individual = GA().genetic_algorithm(input_data)
+    # print(f'Time: {time.time() - start_time}')
+    #
+    # start_time = time.time()
+    # input_data = get_input(patients=150)
+    # selected_individual = GA().genetic_algorithm(input_data)
+    # print(f'Time: {time.time() - start_time}')
 
 
     plt.show()
